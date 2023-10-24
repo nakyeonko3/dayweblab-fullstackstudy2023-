@@ -13,7 +13,6 @@ import java.util.Map;
 @SpringBootApplication
 public class HelloSpringStudyApplication {
 
-    @CrossOrigin( maxAge = 3600)
     @RestController
 //    @Controller
     public static class MyController {
