@@ -13,6 +13,7 @@ import java.util.Map;
 @SpringBootApplication
 public class HelloSpringStudyApplication {
 
+    @CrossOrigin( maxAge = 3600)
     @RestController
 //    @Controller
     public static class MyController {
@@ -43,11 +44,7 @@ public class HelloSpringStudyApplication {
             list.add(new Person("Spring1", 11, "Seoul1", "Developer1"));
             list.add(new Person("Spring2", 12, "Seoul2", "Developer2"));
             list.add(new Person("Spring3", 13, "Seoul3", "Developer3"));
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("list", list);
-
-            return map;
+            return ResultDTO.result(list);
         }
     }
 
