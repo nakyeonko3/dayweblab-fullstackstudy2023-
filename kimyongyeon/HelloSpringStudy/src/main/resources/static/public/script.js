@@ -1,15 +1,17 @@
 const container = document.querySelector(".container"),
     personTable = container.querySelector(".personTable");
 
-const displayPersonData = async (response) => {
-    const data = await response.json();
-    data.list.forEach((item, indexVar) => {
-        personTable.appendChild(createTableRow({ ...item, index: indexVar }));
+const URLPATH = "/list";
+
+const displayPersonData = async () => {
+    const data = await fetchPersonData();
+    data.list.forEach((item, index) => {
+        const { name, age, address } = item;
+        personTable.appendChild(createTableRow(name, age, address, index));
     });
 };
 
-const createTableRow = (data) => {
-    const { name, age, address, index } = data;
+const createTableRow = (name, age, address, index) => {
     const tr = document.createElement("tr");
     tr.appendChild(createTableCell(index));
     tr.appendChild(createTableCell(name));
@@ -24,16 +26,24 @@ const createTableCell = (text) => {
     return td;
 };
 
+const handleStatus = (status) => {
+    if (status >= 400 && status < 500) {
+        throw new Error("Bad request");
+    }
+    if (status > 500) {
+        throw new Error("server error");
+    }
+};
+
 const fetchPersonData = async () => {
     try {
-        const response = await fetch("/list");
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        await displayPersonData(response);
+        const response = await fetch(URLPATH);
+        handleStatus(response.status);
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.log("An error occured", error);
     }
 };
 
-fetchPersonData();
+displayPersonData();
